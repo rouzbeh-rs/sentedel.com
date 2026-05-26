@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentedel — Public Playground</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23010F22'/%3E%3Crect x='10' y='10' width='12' height='12' fill='none' stroke='%2300E5FF' stroke-width='2'/%3E%3Crect x='13' y='13' width='6' height='6' fill='%2300E5FF'/%3E%3C/svg%3E">
+    <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23010F22'/%3E%3Crect x='10' y='10' width='12' height='12' fill='none' stroke='%2300E5FF' stroke-width='2'/%3E%3Crect x='13' y='13' width='6' height='6' fill='%2300E5FF'/%3E%3C/svg%3E">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#010F22',
+                        accent: '#00E5FF',
+                        borderLight: '#E5E7EB',
+                        grayBg: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .sharp-border { border: 1px solid #E5E7EB; }
+        .accent-hover { transition: all 0.2s ease; }
+        .accent-hover:hover { color: #00E5FF; border-color: #00E5FF; }
+    </style>
+</head>
+<body class="min-h-full flex flex-col font-sans text-navy overflow-x-hidden bg-white">
+
+    <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 border-b border-borderLight">
+        <div class="flex h-14 w-full items-center justify-between px-4 lg:mx-auto lg:max-w-[105rem] lg:px-12">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-navy flex items-center justify-center">
+                    <div class="w-2 h-2 bg-accent"></div>
+                </div>
+                <span class="font-display font-semibold text-xl tracking-tight">Sentedel</span>
+            </a>
+            <nav class="hidden lg:flex items-center gap-8">
+                <a href="index.html#benchmarks" class="font-mono text-sm text-navy hover:text-accent transition-colors">Benchmarks</a>
+                <a href="sentedel_blog_post.html" class="font-mono text-sm text-navy hover:text-accent transition-colors">Blog</a>
+                <a href="demo-public.html" class="font-mono text-sm text-accent">Public playground</a>
+            </nav>
+            <a href="index.html" class="hidden sm:flex h-10 items-center justify-center sharp-border px-4 font-mono text-xs text-navy accent-hover">
+                Homepage <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-1 py-10 lg:py-14">
+        <div class="mx-auto max-w-[105rem] px-4 lg:px-12">
+            <div class="max-w-4xl">
+                <div class="flex items-start -mb-px">
+                    <div class="flex items-center sharp-border bg-grayBg px-2 py-1">
+                        <span class="font-mono text-[0.6875rem] leading-none text-navy uppercase tracking-wider">Public · In-browser</span>
+                    </div>
+                </div>
+                <h1 class="text-4xl lg:text-5xl font-display font-medium leading-[1.05] tracking-tight text-navy mt-4">
+                    Public playground
+                </h1>
+                <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
+                    Try publicly available privacy models in your browser. For now, this playground runs OpenAI Privacy Filter while additional open-source options are being evaluated.
+                </p>
+            </div>
+
+            <div class="mt-8 max-w-4xl sharp-border bg-white p-5 lg:p-6">
+                <div class="font-mono text-xs uppercase tracking-widest text-navy/60">Current model</div>
+                <div class="mt-2 font-display text-xl tracking-tight text-navy">OpenAI Privacy Filter</div>
+                <p class="mt-3 text-sm font-light text-navy/75">Apache 2.0 · runs in-browser via Transformers.js</p>
+                <a href="https://huggingface.co/openai/privacy-filter" target="_blank" rel="noopener noreferrer" class="inline-block mt-2 font-mono text-xs text-accent underline underline-offset-2">View on Hugging Face</a>
+            </div>
+
+            <div id="status" class="mt-6 max-w-4xl font-mono text-xs px-3 py-2 sharp-border bg-grayBg text-navy/70">
+                Click Load model to begin.
+            </div>
+
+            <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="sharp-border bg-white p-5 lg:p-6 flex flex-col">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <label for="edi-input" class="font-mono text-xs uppercase tracking-widest text-navy/60">Input</label>
+                        <div class="flex gap-2">
+                            <button id="sample-edi" type="button" class="font-mono text-[0.65rem] uppercase tracking-wider sharp-border px-2 py-1 accent-hover">EDI sample</button>
+                            <button id="sample-plain" type="button" class="font-mono text-[0.65rem] uppercase tracking-wider sharp-border px-2 py-1 accent-hover">Plain text</button>
+                        </div>
+                    </div>
+                    <textarea id="edi-input" rows="14" class="mt-3 w-full flex-1 font-mono text-xs leading-relaxed sharp-border p-4 resize-y focus:outline-none focus:border-accent" spellcheck="false"></textarea>
+                    <div class="mt-4 flex flex-wrap gap-3">
+                        <button id="load-btn" type="button" class="h-11 px-5 font-mono text-sm sharp-border text-navy accent-hover">
+                            Load model
+                        </button>
+                        <button id="run-btn" type="button" class="h-11 px-5 font-mono text-sm bg-navy text-white hover:bg-accent hover:text-navy transition-colors" disabled>
+                            Detect &amp; redact
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sharp-border bg-white p-5 lg:p-6 flex flex-col">
+                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60">Redacted output</div>
+                    <pre id="redacted-output" class="mt-3 flex-1 font-mono text-xs leading-relaxed sharp-border bg-grayBg p-4 overflow-auto whitespace-pre-wrap break-all min-h-[14rem] text-navy/90">—</pre>
+                </div>
+            </div>
+
+            <div class="mt-8 sharp-border bg-white overflow-x-auto">
+                <table class="w-full text-left min-w-[520px]">
+                    <thead class="bg-navy text-white font-mono text-[0.6875rem] uppercase tracking-widest">
+                        <tr>
+                            <th class="py-3 px-4">Category</th>
+                            <th class="py-3 px-4">Start</th>
+                            <th class="py-3 px-4">End</th>
+                            <th class="py-3 px-4">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="entities-body" class="font-mono text-sm text-navy">
+                        <tr>
+                            <td colspan="4" class="py-4 px-4 text-sm text-navy/60">Load a model and run detection to see spans.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="mt-6 max-w-3xl text-xs font-light text-navy/60">
+                Requires Chrome or Edge with WebGPU for best performance (falls back to WASM). First download is ~800MB and cached in the browser.
+            </p>
+        </div>
+    </main>
+
+    <footer class="mt-12">
+        <div class="flex flex-col gap-[8px] px-2.5">
+            <div class="h-[3px] bg-borderLight"></div>
+            <div class="h-[6px] bg-accent"></div>
+            <div class="h-[12px] bg-borderLight"></div>
+        </div>
+        <div class="bg-grayBg py-8">
+            <div class="mx-auto max-w-[105rem] px-4 lg:px-12 flex justify-between items-center">
+                <p class="font-mono text-xs text-navy/50">&copy; 2026 Sentedel</p>
+                <a href="llm.txt" class="font-mono text-xs text-navy/40 hover:text-accent">llm.txt</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script type="module">
+        const MODEL_ID = 'openai/privacy-filter';
+        const MODEL_LABEL = 'OpenAI Privacy Filter';
+        const TRANSFORMERS_URLS = [
+            'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2',
+            'https://unpkg.com/@huggingface/transformers@3.7.2',
+            'https://esm.sh/@huggingface/transformers@3.7.2',
+        ];
+
+        const DEFAULT_EDI = `ISA*00* *00* *ZZ*XSDBVFIK       *ZZ*NZEKSPLG       *240523*7647*^*00501*241535182*0*P*:~
+GS*HC*XSDBVFIK*NZEKSPLG*20240523*7647*1*X*005010X222A1~
+ST*837*0001*005010X222A1~
+NM1*IL*1*JOHNSON*MICHAEL*T***MI*XKW123456789~
+N3*1847 OAK STREET*APT 4B~
+N4*CHICAGO*IL*60601~
+DMG*D8*19920315*M~`;
+
+        const DEFAULT_PLAIN = `Patient Michael Johnson (DOB 03/15/1992) lives at 1847 Oak Street, Chicago IL 60601.
+Member ID: XKW123456789. Email: michael.j@example.com.`;
+
+        let classifier = null;
+        let transformers = null;
+
+        const $ = (id) => document.getElementById(id);
+
+        function setStatus(message, tone = 'neutral') {
+            const el = $('status');
+            el.textContent = message;
+            el.className =
+                'font-mono text-xs px-3 py-2 sharp-border ' +
+                (tone === 'error'
+                    ? 'bg-red-50 text-red-700 border-red-200'
+                    : tone === 'ok'
+                      ? 'bg-accent/10 text-navy border-accent/40'
+                      : 'bg-grayBg text-navy/70');
+        }
+
+        function setLoading(loading) {
+            $('load-btn').disabled = loading;
+            $('run-btn').disabled = loading || !classifier;
+        }
+
+        function redactText(text, entities) {
+            const sorted = [...entities].sort((a, b) => (b.start ?? 0) - (a.start ?? 0));
+            let out = text;
+            for (const ent of sorted) {
+                if (ent.start == null || ent.end == null) continue;
+                out = out.slice(0, ent.start) + '[REDACTED]' + out.slice(ent.end);
+            }
+            return out;
+        }
+
+        function renderEntities(entities) {
+            const tbody = $('entities-body');
+            tbody.innerHTML = '';
+            if (!entities.length) {
+                tbody.innerHTML =
+                    '<tr><td colspan="4" class="py-4 px-4 text-sm text-navy/60">No spans detected.</td></tr>';
+                return;
+            }
+            for (const ent of entities) {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-borderLight';
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-mono text-xs">${ent.entity_group ?? ent.label ?? '-'}</td>
+                    <td class="py-3 px-4 font-mono text-xs">${ent.start ?? '-'}</td>
+                    <td class="py-3 px-4 font-mono text-xs">${ent.end ?? '-'}</td>
+                    <td class="py-3 px-4 font-mono text-xs">${ent.score != null ? (ent.score * 100).toFixed(1) + '%' : '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+
+        async function loadTransformers() {
+            if (transformers) return transformers;
+
+            setStatus('Loading Transformers.js runtime...');
+            let lastError = null;
+
+            for (const url of TRANSFORMERS_URLS) {
+                try {
+                    const mod = await import(url);
+                    if (!mod.pipeline || !mod.env) {
+                        throw new Error(`Transformers.js loaded from ${url}, but exports were missing.`);
+                    }
+                    mod.env.allowRemoteModels = true;
+                    mod.env.useBrowserCache = true;
+                    transformers = mod;
+                    return transformers;
+                } catch (err) {
+                    console.warn(`Failed to load Transformers.js from ${url}:`, err);
+                    lastError = err;
+                }
+            }
+
+            throw new Error(
+                `Could not load Transformers.js from CDN. ${lastError?.message ?? 'Unknown runtime import error'}`,
+            );
+        }
+
+        async function tryLoad({ device, dtype }) {
+            const { pipeline } = await loadTransformers();
+            const options = { dtype };
+            if (device) options.device = device;
+            return pipeline('token-classification', MODEL_ID, options);
+        }
+
+        async function loadModel() {
+            setLoading(true);
+            setStatus('Loading model... first download is ~800MB and may take several minutes.');
+
+            const attempts = [];
+            if (navigator.gpu) {
+                attempts.push({ device: 'webgpu', dtype: 'q4', label: 'WebGPU (q4)' });
+                attempts.push({ device: 'webgpu', dtype: 'q4f16', label: 'WebGPU (q4f16)' });
+            }
+            attempts.push({ device: undefined, dtype: 'q4', label: 'WASM fallback (q4)' });
+
+            classifier = null;
+            let lastError = null;
+
+            for (const attempt of attempts) {
+                try {
+                    setStatus(`Trying ${attempt.label}...`);
+                    classifier = await tryLoad(attempt);
+                    setStatus(`Model ready (${attempt.label}).`, 'ok');
+                    $('run-btn').disabled = false;
+                    setLoading(false);
+                    return;
+                } catch (err) {
+                    console.warn(`Load failed (${attempt.label}):`, err);
+                    lastError = err;
+                    classifier = null;
+                }
+            }
+
+            setStatus(
+                `Failed to load model: ${lastError?.message ?? 'Unknown error'}. Try Chrome or Edge, disable strict content blockers, then refresh and try again.`,
+                'error',
+            );
+            setLoading(false);
+        }
+
+        async function runRedaction() {
+            if (!classifier) return;
+            const text = $('edi-input').value;
+            if (!text.trim()) {
+                setStatus('Paste some text first.', 'error');
+                return;
+            }
+
+            setLoading(true);
+            setStatus('Running detection...');
+            const t0 = performance.now();
+
+            try {
+                const entities = await classifier(text, { aggregation_strategy: 'simple' });
+                const ms = Math.round(performance.now() - t0);
+                $('redacted-output').textContent = redactText(text, entities);
+                renderEntities(entities);
+                setStatus(`Done in ${ms} ms — ${entities.length} span(s) detected.`, 'ok');
+            } catch (err) {
+                console.error(err);
+                setStatus(`Inference failed: ${err.message}`, 'error');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function fillSample(kind) {
+            $('edi-input').value = kind === 'plain' ? DEFAULT_PLAIN : DEFAULT_EDI;
+        }
+
+        $('load-btn').addEventListener('click', loadModel);
+        $('run-btn').addEventListener('click', runRedaction);
+        $('sample-edi').addEventListener('click', () => fillSample('edi'));
+        $('sample-plain').addEventListener('click', () => fillSample('plain'));
+
+        fillSample('edi');
+        setStatus(`Demo script loaded. Click Load model to download ${MODEL_LABEL} (~800MB, cached after first run).`);
+    </script>
+</body>
+</html>
