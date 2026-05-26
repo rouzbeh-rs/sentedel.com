@@ -1,0 +1,6 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+torch>=2.2.0
+safetensors>=0.4.0
+# Privacy Filter architecture (openai_privacy_filter)
+transformers @ git+https://github.com/huggingface/transformers.git
