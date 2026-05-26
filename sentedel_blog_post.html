@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentedel — PHI Detection for EDI Transactions</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23010F22'/%3E%3Crect x='12' y='12' width='8' height='8' fill='%2300E5FF'/%3E%3Crect x='6' y='24' width='20' height='2' fill='%2300E5FF'/%3E%3C/svg%3E">
+    <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23010F22'/%3E%3Crect x='12' y='12' width='8' height='8' fill='%2300E5FF'/%3E%3Crect x='6' y='24' width='20' height='2' fill='%2300E5FF'/%3E%3C/svg%3E">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#010F22',
+                        accent: '#00E5FF',
+                        borderLight: '#E5E7EB',
+                        grayBg: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .sharp-border { border: 1px solid #E5E7EB; }
+        .accent-hover { transition: all 0.2s ease; }
+        .accent-hover:hover { color: #00E5FF; border-color: #00E5FF; }
+    </style>
+</head>
+<body class="min-h-full flex flex-col font-sans text-navy overflow-x-hidden bg-white">
+
+    <!-- Header (matches homepage style) -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 border-b border-borderLight">
+        <div class="flex h-14 w-full items-center justify-between px-4 lg:mx-auto lg:max-w-[105rem] lg:px-12">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-navy flex items-center justify-center">
+                    <div class="w-2 h-2 bg-accent"></div>
+                </div>
+                <span class="font-display font-semibold text-xl tracking-tight">Sentedel</span>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-8">
+                <a href="index.html#benchmarks" class="font-mono text-sm text-navy hover:text-accent transition-colors flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 border border-navy/40 transition-all duration-200"></span> Benchmarks
+                </a>
+                <a href="index.html#blog" class="font-mono text-sm text-navy hover:text-accent transition-colors flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 border border-navy/40 transition-all duration-200 bg-accent border-accent shadow-[0_0_6px_rgba(0,229,255,0.6)]"></span> Blog
+                </a>
+            </nav>
+
+            <a href="index.html" class="hidden sm:flex h-10 items-center justify-center sharp-border px-4 font-mono text-xs text-navy accent-hover">
+                Back to homepage <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-1">
+        <!-- Post hero -->
+        <section class="pt-10 pb-10 lg:pt-16 lg:pb-14">
+            <div class="mx-auto max-w-[105rem] px-4 lg:px-12">
+                <div class="max-w-3xl">
+                    <div class="flex items-start -mb-px">
+                        <div class="flex items-center sharp-border bg-grayBg px-2 py-1">
+                            <span class="font-mono text-[0.6875rem] leading-none text-navy uppercase tracking-wider">Technical Blog · June 2026</span>
+                        </div>
+                    </div>
+                    <h1 class="text-4xl lg:text-6xl font-display font-medium leading-[1.05] tracking-tight text-navy mt-4">
+                        PHI Detection for EDI Transactions.
+                    </h1>
+                    <p class="mt-5 text-lg font-light leading-relaxed text-navy/80">
+                        Building the first PHI detection benchmark for payer-side healthcare EDI — and why general-purpose models fail on structured transaction data.
+                    </p>
+
+                    <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="sharp-border p-4 bg-white">
+                            <div class="font-mono text-xs text-navy/60 uppercase tracking-widest">Relaxed recall</div>
+                            <div class="mt-2 font-display text-3xl tracking-tight">100<span class="text-accent">%</span></div>
+                        </div>
+                        <div class="sharp-border p-4 bg-white">
+                            <div class="font-mono text-xs text-navy/60 uppercase tracking-widest">Strict recall</div>
+                            <div class="mt-2 font-display text-3xl tracking-tight">91.0<span class="text-accent">%</span></div>
+                        </div>
+                        <div class="sharp-border p-4 bg-white">
+                            <div class="font-mono text-xs text-navy/60 uppercase tracking-widest">Strict F1</div>
+                            <div class="mt-2 font-display text-3xl tracking-tight">76.4<span class="text-accent">%</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Post body -->
+        <section class="pb-16 lg:pb-24">
+            <div class="mx-auto max-w-[105rem] px-4 lg:px-12">
+                <div class="grid grid-cols-1 lg:grid-cols-[1fr_20rem] gap-10 items-start">
+                    <article class="min-w-0 max-w-3xl">
+                        <div class="sharp-border bg-white p-6 lg:p-10">
+                            <p class="text-base lg:text-lg font-light leading-relaxed text-navy/85">
+                                EDI (X12) transactions contain PHI, but they don’t look like normal text. A patient name lives inside delimited segments like
+                                <span class="font-mono text-[0.9em] bg-grayBg sharp-border px-2 py-0.5">NM1*IL*1*JOHNSON*MICHAEL*T***MI*XKW123456789~</span>,
+                                not inside sentences. We benchmarked modern PII detectors on synthetic—but structurally valid—payer-side EDI to measure what breaks and what fixes it.
+                            </p>
+
+                            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="sharp-border bg-grayBg p-5">
+                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">Finding</div>
+                                    <div class="font-display text-xl tracking-tight text-navy">General-purpose models fail on EDI</div>
+                                    <p class="mt-2 text-sm font-light text-navy/75">
+                                        Baseline PII models fragment spans across delimiters and qualifiers, collapsing strict boundary performance.
+                                    </p>
+                                </div>
+                                <div class="sharp-border bg-grayBg p-5">
+                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">Fix</div>
+                                    <div class="font-display text-xl tracking-tight text-navy">Domain fine-tuning works fast</div>
+                                    <p class="mt-2 text-sm font-light text-navy/75">
+                                        With a few thousand EDI examples, performance jumps from near-zero strict F1 to production-usable accuracy.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h2 id="summary" class="mt-10 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Approach</h2>
+                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Synthetic EDI + S-tag alignment</h3>
+                            <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
+                                Real payer EDI is PHI by definition, so we generated valid 837P transactions with realistic identifiers (names, addresses, DOBs, IDs) placed in the correct segments. We fine-tuned an open-source token classifier and used S-tag alignment to reduce boundary errors caused by subword tokenization.
+                            </p>
+
+                            <div class="mt-6 sharp-border bg-grayBg p-5">
+                                <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">Why synthetic works here</div>
+                                <p class="text-sm font-light text-navy/80">
+                                    The model is learning <span class="font-medium">structure</span> (which segments/positions contain identifiers), not memorizing clinical content. Perfect labels are more valuable than “realistic” prose.
+                                </p>
+                            </div>
+
+                            <h2 id="benchmark" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Benchmark</h2>
+                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Strict vs relaxed matching</h3>
+                            <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
+                                For compliance, overlap-based NER scores can hide leakage. We report strict boundary metrics (exact start/end) alongside relaxed overlap to show whether any characters remain exposed.
+                            </p>
+
+                            <div class="mt-8 w-full overflow-x-auto sharp-border">
+                                <table class="w-full text-left border-collapse min-w-[600px]">
+                                    <thead class="bg-navy text-white">
+                                        <tr class="font-mono text-[0.6875rem] uppercase tracking-widest">
+                                            <th class="py-4 px-5 border-b border-borderLight">Model</th>
+                                            <th class="py-4 px-5 border-b border-borderLight">Strict Recall</th>
+                                            <th class="py-4 px-5 border-b border-borderLight">Relaxed Recall (50%)</th>
+                                            <th class="py-4 px-5 border-b border-borderLight">Strict F1</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white font-mono text-sm text-navy">
+                                        <tr class="relative" style="background-color: rgba(0, 229, 255, 0.05);">
+                                            <td class="py-4 px-5 font-bold">Sentedel EDI-PHI v1</td>
+                                            <td class="py-4 px-5 font-bold">91.0%</td>
+                                            <td class="py-4 px-5 font-bold">100.0%</td>
+                                            <td class="py-4 px-5 font-bold">76.4%</td>
+                                        </tr>
+                                        <tr class="border-b border-borderLight">
+                                            <td class="py-4 px-5">GLiNER PII Base</td>
+                                            <td class="py-4 px-5 text-navy/70">49.0%</td>
+                                            <td class="py-4 px-5 text-navy/70">54.2%</td>
+                                            <td class="py-4 px-5 text-navy/70">50.3%</td>
+                                        </tr>
+                                        <tr class="border-b border-borderLight">
+                                            <td class="py-4 px-5">NVIDIA GLiNER PII</td>
+                                            <td class="py-4 px-5 text-navy/70">35.9%</td>
+                                            <td class="py-4 px-5 text-navy/70">40.9%</td>
+                                            <td class="py-4 px-5 text-navy/70">39.8%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-4 px-5">OpenAI Privacy Filter (baseline)</td>
+                                            <td class="py-4 px-5 text-red-500/80 font-medium">3.0%</td>
+                                            <td class="py-4 px-5 text-navy/70">64.4%</td>
+                                            <td class="py-4 px-5 text-red-500/80 font-medium">1.2%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h2 id="learned" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">What we learned</h2>
+                            <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="sharp-border p-5 bg-grayBg">
+                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">1</div>
+                                    <div class="font-display text-xl tracking-tight">EDI is out-of-distribution</div>
+                                    <p class="mt-2 text-sm font-light text-navy/75">
+                                        Delimiters, qualifiers, and loop structure break assumptions learned from emails/docs/chat.
+                                    </p>
+                                </div>
+                                <div class="sharp-border p-5 bg-grayBg">
+                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">2</div>
+                                    <div class="font-display text-xl tracking-tight">Fine-tuning is high leverage</div>
+                                    <p class="mt-2 text-sm font-light text-navy/75">
+                                        Thousands of examples are enough to learn consistent PHI locations across segments.
+                                    </p>
+                                </div>
+                                <div class="sharp-border p-5 bg-grayBg">
+                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">3</div>
+                                    <div class="font-display text-xl tracking-tight">False positives are filterable</div>
+                                    <p class="mt-2 text-sm font-light text-navy/75">
+                                        Many FPs cluster in predictable segment types (service dates, control numbers) and can be removed post-hoc.
+                                    </p>
+                                </div>
+                                <div class="sharp-border p-5 bg-grayBg">
+                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">4</div>
+                                    <div class="font-display text-xl tracking-tight">Strict metrics matter</div>
+                                    <p class="mt-2 text-sm font-light text-navy/75">
+                                        Relaxed overlap can look “okay” while still leaking characters that re-identify.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h2 id="details" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Technical details</h2>
+                            <div class="mt-4 sharp-border bg-navy text-white/90 p-5 overflow-x-auto">
+                                <pre class="font-mono text-xs leading-relaxed whitespace-pre-wrap">Base model:       openai/privacy-filter (1.5B params, 50M active, MoE)
+Training data:    5,000 synthetic 837P transactions, 110,053 PHI spans
+Training split:   4,200 train / 300 val / 500 test
+Label strategy:   S-tag alignment into existing PII categories
+Training:         3 epochs, lr=3e-4, bf16, dynamic padding
+Hardware:         NVIDIA L4 (24GB VRAM)
+Training time:    91 minutes
+Evaluation:       Multi-threshold (strict/relaxed), strict boundary focus</pre>
+                            </div>
+                        </div>
+                    </article>
+
+                    <aside class="lg:sticky lg:top-20">
+                        <div class="sharp-border bg-grayBg p-6">
+                            <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-4">On this page</div>
+                            <div class="flex flex-col gap-3 text-sm font-medium text-navy">
+                                <a href="#summary" class="accent-hover border-b border-borderLight pb-2">Approach</a>
+                                <a href="#benchmark" class="accent-hover border-b border-borderLight pb-2">Benchmark</a>
+                                <a href="#learned" class="accent-hover border-b border-borderLight pb-2">What we learned</a>
+                                <a href="#details" class="accent-hover">Technical details</a>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 sharp-border bg-white p-6">
+                            <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-3">Links</div>
+                            <div class="flex flex-col gap-3">
+                                <a class="flex items-center justify-between sharp-border px-4 py-3 font-mono text-xs text-navy accent-hover" href="index.html#benchmarks">
+                                    View homepage benchmarks <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                                </a>
+                                <a class="flex items-center justify-between sharp-border px-4 py-3 font-mono text-xs text-navy accent-hover" href="llm.txt">
+                                    Open llm.txt <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (matches homepage style) -->
+    <footer class="mt-12 lg:mt-24">
+        <div class="flex flex-col gap-[8px] px-2.5">
+            <div class="h-[3px] bg-borderLight"></div>
+            <div class="h-[6px] bg-accent" style="box-shadow: 0 0 10px rgba(0, 229, 255, 0.4), 0 0 2px rgba(0, 229, 255, 0.6);"></div>
+            <div class="h-[12px] bg-borderLight"></div>
+        </div>
+
+        <div class="bg-grayBg">
+            <div class="mx-auto max-w-[105rem] px-4 lg:px-12 pt-12 pb-8">
+                <div class="flex flex-col lg:flex-row gap-12 lg:justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-navy flex items-center justify-center mb-4">
+                            <div class="w-4 h-4 bg-accent"></div>
+                        </div>
+                        <span class="font-display font-semibold text-2xl tracking-tight text-navy">Sentedel</span>
+                        <p class="mt-3 text-sm text-navy/70 max-w-md">
+                            Purpose-built models for detecting and redacting PHI in healthcare EDI.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-16 lg:gap-24">
+                        <div>
+                            <p class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-6">Navigate</p>
+                            <div class="flex flex-col gap-4 text-sm font-medium text-navy">
+                                <a href="index.html" class="hover:text-accent transition-colors">Homepage</a>
+                                <a href="index.html#benchmarks" class="hover:text-accent transition-colors">Benchmarks</a>
+                                <a href="index.html#blog" class="hover:text-accent transition-colors">Blog</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 flex items-center justify-between">
+                    <p class="font-mono text-xs text-navy/50">Secure what's private. &copy; 2026 Sentedel.</p>
+                    <a href="/llm.txt" class="font-mono text-xs text-navy/40 hover:text-accent transition-colors">llm.txt</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
