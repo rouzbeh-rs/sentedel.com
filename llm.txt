@@ -1,0 +1,61 @@
+# Sentedel
+
+> Secure what's private.
+
+Sentedel builds privacy filter models that detect and redact Protected Health Information (PHI) in raw EDI (Electronic Data Interchange) healthcare transactions.
+
+## What We Do
+
+Sentedel fine-tunes language models using proprietary training data and a custom training pipeline to create PHI detection models purpose-built for X12 EDI formatting. General-purpose PII models fail on EDI data because of its unique structure. Our models are trained specifically for this domain.
+
+We selectively open-source our models and benchmarks.
+
+## Technical Blog
+
+- **Featured post**: `sentedel_blog_post.html`
+- **Title**: PHI Detection for EDI Transactions.
+- **Summary**: Building the first PHI detection benchmark for payer-side healthcare EDI — and why general-purpose models fail on structured transaction data.
+
+## Demos
+
+- **EDI-PHI demo**: `demo-server.html` — hosted API (`https://rrsanjabi-sentedel-edi-phi-api.hf.space/api`); Sentedel EDI-PHI model on synthetic-benchmark-trained weights. Do not submit real PHI.
+- **Browser demo**: `demo-public.html` — in-browser; OpenAI Privacy Filter via Transformers.js (no server).
+- **Local dev**: `demo.html` — same EDI-PHI model via local FastAPI server (`scripts/start-server.ps1`).
+
+## Open-source model
+
+- **Hugging Face**: https://huggingface.co/rrsanjabi/sentedel-edi-phi-v1
+- **Local weights** (optional): `models/sentedel-edi-phi-v1/` (`model.safetensors`, `config.json`, tokenizer files)
+- **Inference Space**: https://huggingface.co/spaces/rrsanjabi/sentedel-edi-phi-api
+
+## Current Model (release: v1)
+
+**Sentedel EDI-PHI v1** — MoE token-classification model fine-tuned from `openai/privacy-filter` for healthcare EDI PHI detection.
+
+### Benchmark Results
+
+Synthetic 837P test set: 500 transactions, 13 PHI categories.
+
+| Model                    | Strict Recall | Relaxed Recall (50% Overlap) | Strict F1 |
+|--------------------------|---------------|------------------------------|-----------|
+| Sentedel EDI-PHI v1      | 91.0%         | 100.0%                       | 76.4%     |
+| GLiNER PII Base          | 49.0%         | 54.2%                        | 50.3%     |
+| NVIDIA GLiNER PII        | 35.9%         | 40.9%                        | 39.8%     |
+| OpenAI Privacy Filter    | 3.0%          | 64.4%                        | 1.2%      |
+
+### Key Results
+
+- **Relaxed vs strict**: On the held-out test set, relaxed matching finds 11,000 of 11,002 labeled elements (99.98%); strict exact-boundary recall is 91.0%.
+- **Boundary alignment**: S-tag label mapping improved strict boundary recall from 0.8% (baseline) to 91.0% on the same benchmark.
+- **Training efficiency**: Dynamic sequence packing and LoRA reduced training time by ~62% vs. our baseline training setup.
+
+## Technical Approach
+
+- Fine-tuning open-source base models with proprietary synthetic EDI training data
+- Custom training pipeline with S-tag labeling (instead of standard BIOES) for accurate subword boundary detection
+- Diverse synthetic data generation covering hyphenated names, PO boxes, varied CPT arrays, and other EDI-specific patterns
+- LoRA optimization and dynamic sequence packing for efficient training
+
+## Contact
+
+Website: https://sentedel.com
