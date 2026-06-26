@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentedel — Browser Demo</title>
+    <title>Sentedel — v2.1 NTE-Aware Demo</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23010F22'/%3E%3Crect x='10' y='10' width='12' height='12' fill='none' stroke='%2300E5FF' stroke-width='2'/%3E%3Crect x='13' y='13' width='6' height='6' fill='%2300E5FF'/%3E%3C/svg%3E">
     <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23010F22'/%3E%3Crect x='10' y='10' width='12' height='12' fill='none' stroke='%2300E5FF' stroke-width='2'/%3E%3Crect x='13' y='13' width='6' height='6' fill='%2300E5FF'/%3E%3C/svg%3E">
 
@@ -52,9 +52,9 @@
             <nav class="hidden lg:flex items-center gap-8">
                 <a href="index.html#benchmarks" class="font-mono text-sm text-navy hover:text-accent transition-colors">Benchmarks</a>
                 <a href="index.html#blog" class="font-mono text-sm text-navy hover:text-accent transition-colors">Blog</a>
-                <a href="demo-v21.html" class="font-mono text-sm text-navy hover:text-accent transition-colors">v2.1 demo</a>
+                <a href="demo-v21.html" class="font-mono text-sm text-accent">v2.1 demo</a>
+                <a href="demo-public.html" class="font-mono text-sm text-navy hover:text-accent transition-colors">Browser demo</a>
                 <a href="demo-server.html" class="font-mono text-sm text-navy hover:text-accent transition-colors">EDI-PHI demo</a>
-                <a href="demo-public.html" class="font-mono text-sm text-accent">Browser demo</a>
             </nav>
             <button id="mobile-menu-btn" type="button" class="lg:hidden p-2 -mr-2 text-navy" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
                 <i data-icon="menu" data-lucide="menu" class="w-6 h-6"></i>
@@ -66,9 +66,9 @@
                 <a href="index.html" class="min-h-11 flex items-center font-mono text-sm text-navy hover:text-accent px-2">Homepage</a>
                 <a href="index.html#benchmarks" class="min-h-11 flex items-center font-mono text-sm text-navy hover:text-accent px-2">Benchmarks</a>
                 <a href="index.html#blog" class="min-h-11 flex items-center font-mono text-sm text-navy hover:text-accent px-2">Blog</a>
-                <a href="demo-v21.html" class="min-h-11 flex items-center font-mono text-sm text-navy hover:text-accent px-2">v2.1 demo</a>
+                <a href="demo-v21.html" class="min-h-11 flex items-center font-mono text-sm text-accent px-2">v2.1 demo</a>
+                <a href="demo-public.html" class="min-h-11 flex items-center font-mono text-sm text-navy hover:text-accent px-2">Browser demo</a>
                 <a href="demo-server.html" class="min-h-11 flex items-center font-mono text-sm text-navy hover:text-accent px-2">EDI-PHI demo</a>
-                <a href="demo-public.html" class="min-h-11 flex items-center font-mono text-sm text-accent px-2">Browser demo</a>
             </nav>
         </div>
     </header>
@@ -78,43 +78,45 @@
             <div class="max-w-4xl">
                 <div class="flex items-start -mb-px">
                     <div class="flex items-center sharp-border bg-grayBg px-2 py-1">
-                        <span class="font-mono text-[0.6875rem] leading-none text-navy uppercase tracking-wider">In-browser</span>
+                        <span class="font-mono text-[0.6875rem] leading-none text-navy uppercase tracking-wider">v2.1 · NTE-Aware · Hosted API</span>
                     </div>
                 </div>
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-display font-medium leading-[1.05] tracking-tight text-navy mt-4">
-                    Browser demo
+                    Try v2.1 — NTE-Aware
                 </h1>
                 <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
-                    Try publicly available privacy models in your browser. Currently runs OpenAI Privacy Filter.
+                    Paste X12 text with NTE segments and see PHI detection in action. The v2.1 model detects PHI in both structured segments and free-text NTE clinical notes.
                 </p>
             </div>
 
-            <div class="mt-8 max-w-4xl sharp-border bg-white p-5 lg:p-6">
-                <div class="font-mono text-xs uppercase tracking-widest text-navy/60">Current model</div>
-                <div class="mt-2 font-display text-xl tracking-tight text-navy">OpenAI Privacy Filter</div>
-                <p class="mt-3 text-sm font-light text-navy/75">Apache 2.0 · runs in-browser via Transformers.js</p>
-                <a href="https://huggingface.co/openai/privacy-filter" target="_blank" rel="noopener noreferrer" class="inline-block mt-2 font-mono text-xs text-accent underline underline-offset-2">View on Hugging Face</a>
+            <div class="mt-8 max-w-4xl grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="sharp-border p-4 bg-white">
+                    <div class="font-mono text-xs text-navy/60 uppercase tracking-widest">Relaxed F1</div>
+                    <div class="mt-2 font-display text-3xl tracking-tight">99.7<span class="text-accent">%</span></div>
+                </div>
+                <div class="sharp-border p-4 bg-white">
+                    <div class="font-mono text-xs text-navy/60 uppercase tracking-widest">Strict F1</div>
+                    <div class="mt-2 font-display text-3xl tracking-tight">89.9<span class="text-accent">%</span></div>
+                </div>
+                <div class="sharp-border p-4 bg-white">
+                    <div class="font-mono text-xs text-navy/60 uppercase tracking-widest">NTE Recall</div>
+                    <div class="mt-2 font-display text-3xl tracking-tight">93.0<span class="text-accent">%</span></div>
+                </div>
             </div>
 
-            <div id="status" class="mt-6 max-w-4xl font-mono text-xs px-3 py-2 sharp-border bg-grayBg text-navy/70">
-                Click Load model to begin.
+            <div id="v21-status" class="mt-8 max-w-4xl font-mono text-xs px-3 py-2 sharp-border bg-grayBg text-navy/70">
+                Connecting to v2.1 API…
             </div>
 
             <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="sharp-border bg-white p-5 lg:p-6 flex flex-col">
                     <div class="flex flex-wrap items-center justify-between gap-3">
-                        <label for="edi-input" class="font-mono text-xs uppercase tracking-widest text-navy/60">Input</label>
-                        <div class="flex gap-2">
-                            <button id="sample-edi" type="button" class="min-h-11 font-mono text-[0.65rem] uppercase tracking-wider sharp-border px-3 py-2 accent-hover">EDI sample</button>
-                            <button id="sample-plain" type="button" class="min-h-11 font-mono text-[0.65rem] uppercase tracking-wider sharp-border px-3 py-2 accent-hover">Plain text</button>
-                        </div>
+                        <label for="v21-input" class="font-mono text-xs uppercase tracking-widest text-navy/60">EDI Input (with NTE)</label>
+                        <button id="v21-sample" type="button" class="min-h-11 font-mono text-[0.65rem] uppercase tracking-wider sharp-border px-3 py-2 accent-hover">Load sample</button>
                     </div>
-                    <textarea id="edi-input" rows="14" class="mt-3 w-full flex-1 font-mono text-xs leading-relaxed sharp-border p-4 resize-y focus:outline-none focus:border-accent" spellcheck="false"></textarea>
-                    <div class="mt-4 flex flex-col sm:flex-row gap-3">
-                        <button id="load-btn" type="button" class="h-11 w-full sm:w-auto px-5 font-mono text-sm sharp-border text-navy accent-hover">
-                            Load model
-                        </button>
-                        <button id="run-btn" type="button" class="h-11 w-full sm:w-auto px-5 font-mono text-sm bg-navy text-white hover:bg-accent hover:text-navy transition-colors" disabled>
+                    <textarea id="v21-input" rows="16" class="mt-3 w-full flex-1 font-mono text-xs leading-relaxed sharp-border p-4 resize-y focus:outline-none focus:border-accent" spellcheck="false"></textarea>
+                    <div class="mt-4">
+                        <button id="v21-run" type="button" class="h-11 w-full sm:w-auto px-5 font-mono text-sm bg-navy text-white hover:bg-accent hover:text-navy transition-colors" disabled>
                             Detect &amp; redact
                         </button>
                     </div>
@@ -122,7 +124,7 @@
 
                 <div class="sharp-border bg-white p-5 lg:p-6 flex flex-col">
                     <div class="font-mono text-xs uppercase tracking-widest text-navy/60">Redacted output</div>
-                    <pre id="redacted-output" class="mt-3 flex-1 font-mono text-xs leading-relaxed sharp-border bg-grayBg p-4 overflow-auto whitespace-pre-wrap break-all min-h-[14rem] text-navy/90">—</pre>
+                    <div id="v21-output" class="mt-3 flex-1 font-mono text-xs leading-relaxed sharp-border bg-grayBg p-4 overflow-auto whitespace-pre-wrap break-all min-h-[16rem] text-navy/90">—</div>
                 </div>
             </div>
 
@@ -131,22 +133,41 @@
                 <table class="w-full text-left min-w-[520px]">
                     <thead class="bg-navy text-white font-mono text-[0.6875rem] uppercase tracking-widest">
                         <tr>
+                            <th class="py-3 px-4">Entity</th>
                             <th class="py-3 px-4">Category</th>
                             <th class="py-3 px-4">Start</th>
                             <th class="py-3 px-4">End</th>
-                            <th class="py-3 px-4">Score</th>
                         </tr>
                     </thead>
-                    <tbody id="entities-body" class="font-mono text-sm text-navy">
+                    <tbody id="v21-entities" class="font-mono text-sm text-navy">
                         <tr>
-                            <td colspan="4" class="py-4 px-4 text-sm text-navy/60">Load a model and run detection to see spans.</td>
+                            <td colspan="4" class="py-4 px-4 text-sm text-navy/60">Run detection to see detected PHI spans.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
+            <div class="mt-8 max-w-4xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a href="sentedel_v21_blog_post.html" class="group flex items-center justify-between sharp-border px-5 py-4 bg-white accent-hover">
+                    <div>
+                        <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-1">Technical Report</div>
+                        <div class="font-display text-base tracking-tight text-navy group-hover:text-accent transition-colors">Read the v2.1 report</div>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 shrink-0"></i>
+                </a>
+                <a href="demo-server.html" class="group flex items-center justify-between sharp-border px-5 py-4 bg-white accent-hover">
+                    <div>
+                        <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-1">v1 Model</div>
+                        <div class="font-display text-base tracking-tight text-navy group-hover:text-accent transition-colors">Try the EDI-PHI demo</div>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 shrink-0"></i>
+                </a>
+            </div>
+
             <p class="mt-6 max-w-3xl text-xs font-light text-navy/60">
-                Requires Chrome or Edge with WebGPU for best performance (falls back to WASM). First download is ~800MB and cached in the browser.
+                Research demo — do not submit real patient data. API hosted on HuggingFace Spaces.
+                For in-browser models without a server, see the
+                <a href="demo-public.html" class="text-accent underline underline-offset-2">Browser demo</a>.
             </p>
         </div>
     </main>
@@ -168,7 +189,7 @@
     <script>
         lucide.createIcons();
     </script>
-    <script type="module" src="js/demo-public.js?v=4.2.0"></script>
+    <script src="js/demo-v21.js"></script>
     <script src="js/mobile-nav.js"></script>
 </body>
 </html>
