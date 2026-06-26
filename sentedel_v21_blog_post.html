@@ -314,37 +314,14 @@
 
                             <!-- Technical Details -->
                             <h2 id="details" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Technical details</h2>
-                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Architecture &amp; training</h3>
-
-                            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="sharp-border bg-grayBg p-5">
-                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">Architecture</div>
-                                    <div class="font-display text-xl tracking-tight text-navy">Single sparse MoE</div>
-                                    <p class="mt-2 text-sm font-light text-navy/75">
-                                        openai/privacy-filter — 1.5B parameters, 50M active via sparse Mixture-of-Experts (128 experts, top-4 routing). Token classifier with 33 labels covering 8 PII categories using S-tag labeling. No routing, no ensemble, no regex post-processing.
-                                    </p>
-                                </div>
-                                <div class="sharp-border bg-grayBg p-5">
-                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">Data</div>
-                                    <div class="font-display text-xl tracking-tight text-navy">Synthetic + LLM NTE</div>
-                                    <p class="mt-2 text-sm font-light text-navy/75">
-                                        5,000 synthetic 837P transactions (35% with NTE segments). LLM-generated NTE content from Qwen 2.5 7B producing 217 unique templates. 13 PHI categories across structured and NTE segments.
-                                    </p>
-                                </div>
-                            </div>
-
                             <div class="mt-4 sharp-border bg-navy text-white/90 p-5 overflow-x-auto">
-                                <pre class="font-mono text-xs leading-relaxed whitespace-pre-wrap">Base model:       openai/privacy-filter (1.5B sparse MoE)
-Training data:    5,000 synthetic 837P (35% with NTE segments)
-NTE templates:    217 unique (137 LLM + 80 handcrafted fallback)
-Label strategy:   S-tags only (BIOES caused boundary collapse in v1.5)
-Batch size:       4 (gradient accumulation 4, effective 16)
-Learning rate:    3e-4
-Epochs:           3 (val loss stabilizes by epoch 2)
-Max seq length:   512 tokens (52% truncation rate with NTE)
-Precision:        bf16 with gradient checkpointing
-Hardware:         L4 24GB GPU
-Training time:    211 minutes</pre>
+                                <pre class="font-mono text-xs leading-relaxed whitespace-pre-wrap">Base model:       openai/privacy-filter (1.5B params, 50M active, MoE)
+Training data:    5,000 synthetic 837P transactions (35% with NTE segments)
+NTE templates:    217 unique (137 LLM-generated + 80 handcrafted fallback)
+Training split:   4,200 train / 300 val / 500 test
+Label strategy:   S-tag alignment into existing PII categories
+Training:         3 epochs, lr=3e-4, bf16, dynamic padding, batch 4 (eff. 16)
+Evaluation:       Multi-threshold (strict/relaxed), structured vs NTE breakdown</pre>
                             </div>
 
                             <!-- What This Means -->
