@@ -299,13 +299,6 @@ Training:         3 epochs, lr=3e-4, bf16, dynamic padding, batch 4 (eff. 16)
 Evaluation:       Multi-threshold (strict/relaxed), structured vs NTE breakdown</pre>
                             </div>
 
-                            <!-- Discussion -->
-                            <h2 id="implications" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Discussion</h2>
-                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Discussion</h3>
-                            <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
-                                NTE de-identification requires both structural awareness (X12 transaction context) and clinical NLP capability (entity detection in prose). Rule-based tools cannot parse free text for unconfigured PHI types; clinical NLP models lack X12 segment understanding. Sentedel v2.1 addresses both by fine-tuning a single model on structured and NTE-containing data within the same transaction. The results indicate that fine-tuning on NTE-injected synthetic data is a viable approach for this combined task.
-                            </p>
-
                             <!-- Try It -->
                             <h2 id="demo" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Try it</h2>
                             <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Demo</h3>
@@ -334,7 +327,6 @@ Evaluation:       Multi-threshold (strict/relaxed), structured vs NTE breakdown<
                                 <a href="#approach" class="accent-hover border-b border-borderLight pb-2">Approach</a>
                                 <a href="#categories" class="accent-hover border-b border-borderLight pb-2">Per-category</a>
                                 <a href="#details" class="accent-hover border-b border-borderLight pb-2">Technical details</a>
-                                <a href="#implications" class="accent-hover border-b border-borderLight pb-2">Discussion</a>
                                 <a href="#demo" class="accent-hover">Try it</a>
                             </div>
                         </div>
