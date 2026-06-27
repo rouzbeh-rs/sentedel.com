@@ -126,24 +126,17 @@
                         <div class="sharp-border bg-white p-6 lg:p-10">
 
                             <!-- The Problem -->
-                            <h2 id="problem" class="font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">The Problem</h2>
-                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">NTE Traces</h3>
+                            <h2 id="problem" class="font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Background</h2>
+                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">NTE segments</h3>
                             <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
-                                Every X12 EDI de-identification tool — rule-based or ML-based — handles the structured segments well enough. Names in NM1, addresses in N3/N4, dates of birth in DMG: these sit in predictable positions with known qualifiers, and a well-configured system can mask them reliably.
-                            </p>
-                            <p class="mt-3 text-base font-light leading-relaxed text-navy/80">
-                                But there's a segment that breaks the pattern entirely: <span class="font-medium text-navy">NTE</span>.
-                            </p>
-                            <p class="mt-3 text-base font-light leading-relaxed text-navy/80">
-                                The NTE segment is a free-text field embedded inside an otherwise structured transaction. In an 837P professional claim, NTE appears in Loop 2300 (claim-level notes) and Loop 2400 (service line notes), and it can contain anything a clinician or billing specialist decides to type. Prior authorization notes with patient names and dates of birth. Referral notes with provider names and facility names. Administrative corrections with member IDs and claim numbers. All written in natural language, not in predictable element positions.
+                                Existing X12 EDI de-identification approaches handle structured segments reliably — PHI in NM1, N3/N4, and DMG sits in predictable positions with known qualifiers. The NTE segment presents a different challenge: it is a free-text field embedded within an otherwise structured transaction, appearing in Loop 2300 (claim-level) and Loop 2400 (service line) of 837P claims. NTE content contains PHI in natural language — patient names, dates of birth, member IDs — without predictable element positions.
                             </p>
 
-
-                            <!-- What We Found -->
+                            <!-- Benchmark Results -->
                             <h2 id="results" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Results</h2>
-                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Improvements Continue</h3>
+                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Benchmark results</h3>
                             <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
-                                We benchmarked four models on 500 synthetic 837P transactions, 162 of which contained NTE segments with PHI embedded in clinical free text. The NTE content was generated using Qwen 2.5 7B-Instruct to produce diverse, realistic clinical notes with varied phrasing, abbreviations, and casing.
+                                Four models were evaluated on 500 synthetic 837P transactions, 162 of which contained NTE segments with embedded PHI. NTE content was generated using Qwen 2.5 7B-Instruct to produce diverse clinical notes with varied phrasing and casing.
                             </p>
 
                             <!-- Overall Performance Table -->
@@ -183,13 +176,13 @@
                                 </table>
                             </div>
                             <p class="mt-3 text-sm font-light text-navy/70">
-                                Sentedel v2.1 achieves near-perfect relaxed F1 and 89.9% strict F1 — a significant improvement over v1 results (86.0% and 78.3% respectively), even on a harder task that includes free-text PHI.
+                                v2.1 achieves 99.7% relaxed F1 and 89.9% strict F1, improving over v1 (86.0% / 78.3%) on a harder evaluation that includes free-text PHI.
                             </p>
 
                             <!-- NTE Gap Table -->
-                            <h4 class="mt-10 text-lg font-display font-medium tracking-tight text-navy">The NTE gap</h4>
+                            <h4 class="mt-10 text-lg font-display font-medium tracking-tight text-navy">Structured vs NTE recall</h4>
                             <p class="mt-3 text-base font-light leading-relaxed text-navy/80">
-                                The real story is in the NTE-specific numbers:
+                                NTE-specific recall by model:
                             </p>
                             <div class="mt-4 relative w-full overflow-x-auto sharp-border table-scroll-wrap">
                                 <p class="md:hidden font-mono text-[0.65rem] text-navy/50 px-4 py-2 border-b border-borderLight bg-grayBg">Swipe table &rarr;</p>
@@ -226,55 +219,43 @@
                                 </table>
                             </div>
                             <p class="mt-3 text-sm font-light text-navy/70">
-                                GLiNER PII Base — a model specifically designed for PII detection — catches only 29.4% of PHI in NTE segments. NVIDIA's GLiNER variant manages 40.8%. Even the unfine-tuned Privacy Filter only reaches 67.1%. Sentedel v2.1 catches 93.0% of NTE PHI while maintaining 99.7% recall on structured segments.
+                                GLiNER PII Base achieves 29.4% NTE recall; NVIDIA GLiNER reaches 40.8%; the unfine-tuned Privacy Filter reaches 67.1%. Sentedel v2.1 achieves 93.0% NTE recall while maintaining 99.7% on structured segments.
                             </p>
 
-                            <!-- How We Got Here -->
+                            <!-- Approach -->
                             <h2 id="approach" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Approach</h2>
-                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">How we got here</h3>
+                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Methodology</h3>
 
                             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="sharp-border bg-grayBg p-5">
                                     <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">v2 Experiment</div>
-                                    <div class="font-display text-xl tracking-tight text-navy">Why not two models?</div>
+                                    <div class="font-display text-xl tracking-tight text-navy">Dual-model routing</div>
                                     <p class="mt-2 text-sm font-light text-navy/75">
-                                        We tried routing structured segments to our fine-tuned model and NTE text to a clinical de-ID model (obi/deid_roberta_i2b2). It didn't work — the clinical model was trained on lowercase EHR narratives and failed on uppercase EDI-style NTE text. The routed pipeline achieved only 68.2% NTE recall vs 99.3% from the structural model alone.
+                                        v2 tested routing structured segments to the fine-tuned model and NTE text to a clinical de-ID model (obi/deid_roberta_i2b2). The clinical model, trained on lowercase EHR narratives, underperformed on uppercase EDI-style NTE text — achieving 68.2% NTE recall vs 99.3% from the structural model alone.
                                     </p>
                                 </div>
                                 <div class="sharp-border bg-grayBg p-5">
-                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">Key Insight</div>
-                                    <div class="font-display text-xl tracking-tight text-navy">Single model wins</div>
+                                    <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">v2.1 Architecture</div>
+                                    <div class="font-display text-xl tracking-tight text-navy">Single unified model</div>
                                     <p class="mt-2 text-sm font-light text-navy/75">
-                                        A single model fine-tuned on both structured and NTE-containing data outperforms a specialized dual-model architecture for this task.
+                                        A single model fine-tuned on both structured and NTE-containing data outperforms the specialized dual-model routing architecture for this task.
                                     </p>
                                 </div>
                             </div>
 
-                            <h4 class="mt-8 text-lg font-display font-medium tracking-tight text-navy">The data problem</h4>
-                            <p class="mt-3 text-base font-light leading-relaxed text-navy/80">
-                                The 99.3% NTE recall in v2 was misleading — those NTE segments were generated from 20 handcrafted templates, predictable enough that a model trained on structural patterns could catch them without understanding clinical prose. We needed more diverse, realistic NTE content to truly test generalization.
-                            </p>
-
                             <h4 class="mt-8 text-lg font-display font-medium tracking-tight text-navy">LLM-generated NTE templates</h4>
                             <p class="mt-3 text-base font-light leading-relaxed text-navy/80">
-                                v2.1 uses Qwen 2.5 7B-Instruct (4-bit quantized) to generate diverse NTE note templates. The LLM receives a system prompt instructing it to produce clinical notes using placeholder tokens — <span class="font-mono text-[0.85em] bg-grayBg sharp-border px-1.5 py-0.5">&lt;&lt;PATIENT_NAME&gt;&gt;</span>, <span class="font-mono text-[0.85em] bg-grayBg sharp-border px-1.5 py-0.5">&lt;&lt;MEMBER_ID&gt;&gt;</span>, <span class="font-mono text-[0.85em] bg-grayBg sharp-border px-1.5 py-0.5">&lt;&lt;PATIENT_DOB&gt;&gt;</span> — with varied styles, abbreviations, and clinical contexts.
+                                v2 used 20 handcrafted NTE templates, which were predictable enough to achieve 99.3% recall without genuine generalization. v2.1 replaces these with LLM-generated templates from Qwen 2.5 7B-Instruct (4-bit quantized), producing clinical notes with placeholder tokens (<span class="font-mono text-[0.85em] bg-grayBg sharp-border px-1.5 py-0.5">&lt;&lt;PATIENT_NAME&gt;&gt;</span>, <span class="font-mono text-[0.85em] bg-grayBg sharp-border px-1.5 py-0.5">&lt;&lt;MEMBER_ID&gt;&gt;</span>, etc.) across varied styles and clinical contexts.
                             </p>
                             <p class="mt-3 text-base font-light leading-relaxed text-navy/80">
-                                During synthetic EDI generation, the placeholders get replaced with Faker-generated PHI values, giving exact character-level labels through offset tracking during substitution. The LLM decides structure and style; the generator controls the PHI values.
+                                During EDI generation, placeholders are replaced with Faker-generated PHI values, providing exact character-level labels through offset tracking. This yields 217 unique templates and a more representative evaluation — NTE recall dropped from 99.3% to 93.0%, confirming the model is tested against diverse clinical language.
                             </p>
-
-                            <div class="mt-6 sharp-border bg-grayBg p-5">
-                                <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-2">Result</div>
-                                <p class="text-sm font-light text-navy/80">
-                                    217 unique NTE templates. NTE recall dropped from 99.3% (handcrafted templates) to 93.0% (LLM-generated) — proving the model is now being genuinely tested against diverse clinical language.
-                                </p>
-                            </div>
 
                             <!-- Per-Category Results -->
                             <h2 id="categories" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Per-category</h2>
-                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Per-category results</h3>
+                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Per-category recall</h3>
                             <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
-                                All 13 PHI categories at or near 100% recall at moderate (60%) threshold:
+                                Recall at moderate (60%) threshold across all 13 PHI categories:
                             </p>
 
                             <div class="mt-6 relative w-full overflow-x-auto sharp-border table-scroll-wrap">
@@ -318,11 +299,18 @@ Training:         3 epochs, lr=3e-4, bf16, dynamic padding, batch 4 (eff. 16)
 Evaluation:       Multi-threshold (strict/relaxed), structured vs NTE breakdown</pre>
                             </div>
 
+                            <!-- Discussion -->
+                            <h2 id="implications" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Discussion</h2>
+                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Discussion</h3>
+                            <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
+                                NTE de-identification requires both structural awareness (X12 transaction context) and clinical NLP capability (entity detection in prose). Rule-based tools cannot parse free text for unconfigured PHI types; clinical NLP models lack X12 segment understanding. Sentedel v2.1 addresses both by fine-tuning a single model on structured and NTE-containing data within the same transaction. The results indicate that fine-tuning on NTE-injected synthetic data is a viable approach for this combined task.
+                            </p>
+
                             <!-- Try It -->
                             <h2 id="demo" class="mt-12 font-mono text-xs uppercase tracking-widest text-navy/60 scroll-mt-24">Try it</h2>
-                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Live demo</h3>
+                            <h3 class="mt-3 text-2xl font-display font-medium tracking-tight text-navy">Demo</h3>
                             <p class="mt-4 text-base font-light leading-relaxed text-navy/80">
-                                The v2.1 model is available as a free demo API. Send any X12 text (including NTE segments) and get back detected PHI spans with redaction.
+                                The v2.1 model is available as a demo API for X12 text including NTE segments.
                             </p>
                             <div class="mt-4 flex flex-col sm:flex-row gap-3">
                                 <a href="demo-v21.html" class="flex h-11 items-center justify-center gap-2 bg-navy px-5 font-mono text-sm text-white transition-colors hover:bg-accent hover:text-navy">
@@ -333,20 +321,21 @@ Evaluation:       Multi-threshold (strict/relaxed), structured vs NTE breakdown<
                                 </a>
                             </div>
                             <p class="mt-3 text-xs text-navy/50">Research demo — do not submit real patient data.</p>
+                        </div>
+                    </article>
 
                     <!-- Sidebar -->
                     <aside class="order-first lg:order-none lg:sticky lg:top-20">
                         <div class="sharp-border bg-grayBg p-6">
                             <div class="font-mono text-xs uppercase tracking-widest text-navy/60 mb-4">On this page</div>
                             <div class="flex flex-col gap-3 text-sm font-medium text-navy">
-                                <a href="#problem" class="accent-hover border-b border-borderLight pb-2">The Problem</a>
+                                <a href="#problem" class="accent-hover border-b border-borderLight pb-2">Background</a>
                                 <a href="#results" class="accent-hover border-b border-borderLight pb-2">Results</a>
                                 <a href="#approach" class="accent-hover border-b border-borderLight pb-2">Approach</a>
                                 <a href="#categories" class="accent-hover border-b border-borderLight pb-2">Per-category</a>
                                 <a href="#details" class="accent-hover border-b border-borderLight pb-2">Technical details</a>
-                                <a href="#implications" class="accent-hover border-b border-borderLight pb-2">Implications</a>
-                                <a href="#demo" class="accent-hover border-b border-borderLight pb-2">Try it</a>
-                                <a href="#next" class="accent-hover">What's next</a>
+                                <a href="#implications" class="accent-hover border-b border-borderLight pb-2">Discussion</a>
+                                <a href="#demo" class="accent-hover">Try it</a>
                             </div>
                         </div>
 
